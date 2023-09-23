@@ -1,0 +1,7 @@
+.navbar {
+    display: flex;
+}
+
+.navbar li {
+    margin: 15px;
+}

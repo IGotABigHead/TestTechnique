@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Acheter des Tokens</title>
+</head>
+
+<body>
+    <h1>Acheter des Tokens</h1>
+    <form id="buyTokensForm">
+        <label for="amount">Quantité de Tokens :</label>
+        <input type="number" id="amount" name="amount" required><br><br>
+
+        <label for="paymentMethod">Méthode de Paiement :</label>
+        <select id="paymentMethod" name="paymentMethod" required>
+            <option value="crypto">Crypto-monnaie</option>
+            <option value="fiat">Monnaie fiduciaire</option>
+        </select><br><br>
+
+        <input type="submit" value="Acheter">
+    </form>
+
+    <h2>Résultat :</h2>
+    <pre id="result"></pre>
+
+    <script>
+        // Code JavaScript pour gérer la soumission du formulaire
+        document.getElementById('buyTokensForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const amount = document.getElementById('amount').value;
+            const paymentMethod = document.getElementById('paymentMethod').value;
+
+            // Construire la requête d'achat de tokens
+            const purchaseRequest = {
+                amount: parseFloat(amount),
+                paymentMethod: paymentMethod,
+            };
+
+            // Envoyer la requête d'achat à l'API
+            fetch('/api/buy-tokens', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(purchaseRequest),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const result = JSON.stringify(data, null, 2);
+                    document.getElementById('result').textContent = result;
+                })
+                .catch(error => {
+                    console.error('Erreur :', error);
+                });
+        });
+    </script>
+</body>
+
+</html>

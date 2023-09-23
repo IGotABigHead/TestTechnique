@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Mise en Vente de Tokens</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+<body>
+
+    <h2>Mise en Vente de Tokens sur le Marché Secondaire</h2>
+    <form id="listTokenForSaleForm">
+        <label for="tokenToSell">Token à Mettre en Vente :</label>
+        <input type="text" id="tokenToSell" name="tokenToSell" required><br><br>
+
+        <label for="price">Prix de Vente (en tokens) :</label>
+        <input type="number" id="price" name="price" required><br><br>
+
+        <label for="privateKey">Clé Privée du Vendeur :</label>
+        <input type="text" id="privateKey" name="privateKey" required><br><br>
+
+        <input type="submit" value="Mettre en Vente">
+    </form>
+
+    <h3>Résultat :</h3>
+    <pre id="result"></pre>
+
+
+
+    <script>
+        document.getElementById('listTokenForSaleForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const tokenToSell = document.getElementById('tokenToSell').value;
+            const price = document.getElementById('price').value;
+            const privateKey = document.getElementById('privateKey').value;
+
+            // Construire la requête API pour mettre en vente le token
+            const listingData = {
+                tokenToSell,
+                price: parseFloat(price),
+                privateKey,
+            };
+
+            // Envoyer la requête API
+            fetch('/api/list-token-for-sale', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(listingData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const result = JSON.stringify(data, null, 2);
+                    document.getElementById('result').textContent = result;
+                })
+                .catch(error => {
+                    console.error('Erreur :', error);
+                });
+        });
+    </script>
+</body>
+
+</html>

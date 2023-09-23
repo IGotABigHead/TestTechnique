@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Creer un Contrat</title>
+</head>
+
+<body>
+    <h1>Creer un Contrat</h1>
+    <form id="createContractForm">
+        <label for="name">Nom du Contrat :</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="description">Description :</label>
+        <input type="text" id="description" name="description"><br><br>
+
+        <input type="submit" value="Creer">
+    </form>
+
+    <h2>Resultat :</h2>
+    <pre id="result"></pre>
+
+    <script>
+        // Code JavaScript pour gerer la soumission du formulaire
+        document.getElementById('createContractForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const description = document.getElementById('description').value;
+
+            // Construire la requête GraphQL
+            const query = `
+                mutation {
+                    createContract(name: "${name}", description: "${description}") {
+                        id
+                        name
+                        description
+                    }
+                }
+            `;
+
+            // Envoyer la requête GraphQL à votre API (ajoutez votre URL de l'API GraphQL)
+            fetch('api/create-contract', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ query }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const result = JSON.stringify(data, null, 2);
+                    document.getElementById('result').textContent = result;
+                })
+                .catch(error => {
+                    console.error('Erreur :', error);
+                });
+        });
+    </script>
+</body>
+
+</html>
